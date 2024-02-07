@@ -22,12 +22,13 @@ import {
 import { formData, formschema } from '@/lib/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PredictionData } from '@/lib/interfaces';
+import Loading from '@/components/shared/Loading';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
+import { formatter } from '@/lib/utils';
 import { useState } from 'react';
 import axios from 'axios';
-import Loading from '../shared/Loading';
 
 const PredictorForm: React.FC<PredictionData> = ({
 	companies,
@@ -263,8 +264,11 @@ const PredictorForm: React.FC<PredictionData> = ({
 			</Form>
 
 			{isLoading && <Loading />}
+
 			{responseData && (
-				<span className='mt-3 font-bold text-lg'>{responseData}</span>
+				<span className='mt-3 font-bold text-lg'>
+					{formatter.format(Number(responseData))}
+				</span>
 			)}
 		</div>
 	);
