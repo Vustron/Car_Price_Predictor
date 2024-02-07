@@ -12,9 +12,7 @@ import {
 import {
 	Select,
 	SelectContent,
-	SelectGroup,
 	SelectItem,
-	SelectLabel,
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
@@ -38,7 +36,7 @@ const PredictorForm: React.FC<PredictionData> = ({
 }) => {
 	// init state
 	const [isLoading, setIsLoading] = useState(false);
-	const [responseData, setResponseData] = useState('');
+	const [responseData, setResponseData] = useState(null);
 
 	// init form
 	const form = useForm<formData>({

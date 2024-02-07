@@ -6,8 +6,6 @@ export default async function Home() {
 	// get product
 	const data = await getData();
 
-	console.log(data);
-
 	const companies = data.companies.sort();
 	const car_models = data.car_models.sort();
 	const years = data.years.sort();
