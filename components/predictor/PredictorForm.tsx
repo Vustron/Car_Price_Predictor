@@ -25,6 +25,9 @@ import { PredictionData } from '@/lib/interfaces';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import axios from 'axios';
+import Loading from '../shared/Loading';
 
 const PredictorForm: React.FC<PredictionData> = ({
 	companies,
@@ -32,6 +35,10 @@ const PredictorForm: React.FC<PredictionData> = ({
 	years,
 	fuel_types,
 }) => {
+	// init state
+	const [isLoading, setIsLoading] = useState(false);
+	const [responseData, setResponseData] = useState('');
+
 	// init form
 	const form = useForm<formData>({
 		resolver: zodResolver(formschema),
@@ -44,8 +51,22 @@ const PredictorForm: React.FC<PredictionData> = ({
 		},
 	});
 
+	// handle submit
 	const onSubmit = async (values: formData) => {
-		console.log(values);
+		try {
+			setIsLoading(true);
+
+			const res = await axios.post(
+				`${process.env.NEXT_PUBLIC_API_DATA_URL}/predict`,
+				values
+			);
+
+			setResponseData(res.data.prediction);
+		} catch (error: any) {
+			console.log(error);
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (
@@ -232,13 +253,19 @@ const PredictorForm: React.FC<PredictionData> = ({
 					</div>
 
 					<Button
-						className='ml-auto w-full hover:bg-slate-700 hover:text-white'
+						disabled={isLoading}
+						className='ml-[100px] mb-10 w-[300px] hover:bg-slate-700 hover:text-white'
 						type='submit'
 					>
 						Send
 					</Button>
 				</form>
 			</Form>
+
+			{isLoading && <Loading />}
+			{responseData && (
+				<span className='mt-3 font-bold text-lg'>{responseData}</span>
+			)}
 		</div>
 	);
 };
