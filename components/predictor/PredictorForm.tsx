@@ -21,60 +21,220 @@ import {
 
 import { formData, formschema } from '@/lib/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { PredictionData } from '@/lib/interfaces';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 
-const PredictorForm = () => {
+const PredictorForm: React.FC<PredictionData> = ({
+	companies,
+	car_models,
+	years,
+	fuel_types,
+}) => {
 	// init form
 	const form = useForm<formData>({
 		resolver: zodResolver(formschema),
 		defaultValues: {
-			companyName: '',
-			carModel: '',
-			yearPurchased: '',
-			fuelType: '',
+			companies: companies.join(','),
+			car_models: car_models.join(','),
+			years: years.join(','),
+			fuel_types: fuel_types.join(','),
 			kmTravelled: 0,
 		},
 	});
+
+	const onSubmit = async (values: formData) => {
+		console.log(values);
+	};
 
 	return (
 		<div className='flex flex-col justify-center items-center max-w-[800px]'>
 			<Form {...form}>
 				<form
-					onSubmit={form.handleSubmit(() => null)}
-					className='space-y-8 w-[350px]'
+					onSubmit={form.handleSubmit(onSubmit)}
+					className='space-y-5 w-[500px]'
 				>
-					<FormField
-						control={form.control}
-						name='companyName'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel className='font-bold text-md'>
-									Company Name
-								</FormLabel>
+					<div className='grid grid-cols-2 gap-8 '>
+						<FormField
+							control={form.control}
+							name='companies'
+							render={({ field }) => (
+								// Company Name
+								<FormItem>
+									<FormLabel className='font-bold text-md'>
+										Select Company
+									</FormLabel>
 
-								<Select
-									onValueChange={field.onChange}
-									value={field.value}
-									defaultValue={field.value}
-								>
+									<Select
+										onValueChange={field.onChange}
+										value={field.value || ''}
+										defaultValue={field.value || ''}
+									>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue
+													defaultValue={field.value || ''}
+													placeholder='Company Name'
+												/>
+											</SelectTrigger>
+										</FormControl>
+
+										<SelectContent>
+											{companies.map((company) => (
+												<SelectItem key={company} value={company}>
+													{company}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name='car_models'
+							render={({ field }) => (
+								// Car Model
+								<FormItem>
+									<FormLabel className='font-bold text-md'>
+										Select Model
+									</FormLabel>
+
+									<Select
+										onValueChange={field.onChange}
+										value={field.value || ''}
+										defaultValue={field.value || ''}
+									>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue
+													defaultValue={field.value || ''}
+													placeholder='Car Model'
+												/>
+											</SelectTrigger>
+										</FormControl>
+
+										<SelectContent>
+											{car_models.map((model) => (
+												<SelectItem key={model} value={model}>
+													{model}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name='years'
+							render={({ field }) => (
+								// Year Purchased
+								<FormItem>
+									<FormLabel className='font-bold text-md'>
+										Select Year of Purchase
+									</FormLabel>
+
+									<Select
+										onValueChange={field.onChange}
+										value={field.value || ''}
+										defaultValue={field.value || ''}
+									>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue
+													defaultValue={field.value || ''}
+													placeholder='Year of Purchase'
+												/>
+											</SelectTrigger>
+										</FormControl>
+
+										<SelectContent>
+											{years.map((year) => (
+												<SelectItem key={year} value={year}>
+													{year}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name='fuel_types'
+							render={({ field }) => (
+								// Fuel Type
+								<FormItem>
+									<FormLabel className='font-bold text-md'>
+										Select Fuel Type
+									</FormLabel>
+
+									<Select
+										onValueChange={field.onChange}
+										value={field.value || ''}
+										defaultValue={field.value || ''}
+									>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue
+													defaultValue={field.value || ''}
+													placeholder='Fuel Type'
+												/>
+											</SelectTrigger>
+										</FormControl>
+
+										<SelectContent>
+											{fuel_types.map((fuel) => (
+												<SelectItem key={fuel} value={fuel}>
+													{fuel}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</div>
+
+					<div className='flex flex-col justify-center items-center'>
+						<FormField
+							control={form.control}
+							name='kmTravelled'
+							render={({ field }) => (
+								// Km Travelled
+								<FormItem>
+									<FormLabel className='font-bold text-md'>
+										Enter the number of kilometers that the car travelled
+									</FormLabel>
+
 									<FormControl>
-										<SelectTrigger>
-											<SelectValue
-												defaultValue={field.value}
-												placeholder='Select company'
-											/>
-										</SelectTrigger>
+										<Input
+											type='number'
+											placeholder='e.g. 30'
+											{...field}
+											onChange={(e) => field.onChange(parseInt(e.target.value))}
+										/>
 									</FormControl>
 
-									<SelectContent></SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</div>
 
-					<Button className='ml-auto' type='submit'>
+					<Button
+						className='ml-auto w-full hover:bg-slate-700 hover:text-white'
+						type='submit'
+					>
 						Send
 					</Button>
 				</form>
