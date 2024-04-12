@@ -6,7 +6,7 @@ const Navbar = () => {
 			<nav className='bg-transparent flex flex-row justify-center items-center py-4'>
 				<ModeToggle />
 
-				<h1 className='pl-3 font-bold text-3xl'>Car Price Predictor</h1>
+				<h1 className='pl-3 font-bold text-3xl'>Salary Predictor</h1>
 			</nav>
 		</>
 	);

@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
-import Navbar from '@/components/shared/Navbar';
+import { Toaster } from '@/components/ui/sonner';
 import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
 import '@/app/globals.css';
@@ -7,8 +7,8 @@ import '@/app/globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-	title: 'Car Price Predictor',
-	description: 'Car Price Predictor',
+	title: 'Salary Predictor',
+	description: 'Task 4 Data Mining',
 };
 
 export default function RootLayout({
@@ -18,15 +18,15 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en'>
-			<body className={inter.className}>
+			<body className={`${inter.className}`}>
 				<ThemeProvider
 					attribute='class'
 					defaultTheme='dark'
 					enableSystem
 					disableTransitionOnChange
 				>
-					<Navbar />
 					{children}
+					<Toaster position='top-center' richColors />
 				</ThemeProvider>
 			</body>
 		</html>
